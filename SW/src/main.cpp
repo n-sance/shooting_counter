@@ -1,10 +1,16 @@
 #include "main.h"
 
+#include <Wire.h>  // Only needed for Arduino 1.6.5 and earlier
+#include "SSD1306Wire.h" // legacy include: `#include "SSD1306.h"`
+
 Adafruit_ADXL345_Unified accel(12345);
 OneButton button(32, true);
-OneButton button_2(24, true);
+// OneButton button_2(24, true);
 Ticker time1(get_data_from_sensors, SENSORS_POLL_FREQ_US, SENSORS_POL_CNT, MICROS);
 ShootDetector f(100, 200, 3);
+
+SSD1306Wire  display(0x3c, 21, 22);
+
 
 std::deque<int> deque_acc(DEQUE_SIZE, 0);
 std::deque<int> deque_piez(DEQUE_SIZE, 0);
@@ -26,6 +32,12 @@ int get_summ_values_from_acc(float x, float y, float z)
   return (x_l + y_l + z_l);
 }
 
+void drawFontFaceDemo(int num) {
+    display.setTextAlignment(TEXT_ALIGN_LEFT);
+    display.setFont(ArialMT_Plain_24);
+    display.drawString(0, 26, String(num));
+}
+
 void get_data_from_sensors()
 {
     sensors_event_t event;
@@ -40,7 +52,6 @@ void get_data_from_sensors()
     deque_piez.pop_front();
 
     f.potential_shoot_check(deque_acc, deque_piez);
-
     Serial.print(sum_acc); Serial.print(",");
     Serial.println(vibro);
 }
@@ -97,13 +108,16 @@ void setup(void)
   /* Display additional settings (outside the scope of sensor_t) */
   displayDataRate(accel);
   displayRange(accel);
+
+  display.init();
+
+  display.flipScreenVertically();
+  display.setFont(ArialMT_Plain_10);
   Serial.println("Configured");
 }
 
 
 void loop() {
-
-
   if (time1.counter() == SENSORS_POL_CNT && !is_finished)
   {
     is_finished = true;
@@ -112,5 +126,7 @@ void loop() {
   }
   time1.update();
   button.tick();
-
+      display.clear();
+    drawFontFaceDemo(f.shoots);
+    display.display();
 }

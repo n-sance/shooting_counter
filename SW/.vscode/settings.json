@@ -1,0 +1,6 @@
+{
+	"files.associations": {
+		"spi.h": "c",
+		"wire.h": "c"
+	}
+}

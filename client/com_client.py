@@ -10,7 +10,7 @@ BAUDRATE = "9600"
 # CHANGE NAME OF YOUR COM PORt BEFORE USING
 # COM_DEVICE_NAME = "/dev/cu.SLAB_USBtoUART"
 COM_DEVICE_NAME = "/dev/ttyUSB0"
-RESULT_PATH = f"../measurements"
+RESULT_PATH = f"./measurements"
 
 
 class ComClient:
@@ -30,7 +30,7 @@ class ComClient:
 
     def read_from_device(self, path_to_output_file=None):
         line = self.session.readline(self.buffer_size)
-        print("after line")
+        print("Reading from the device...")
 
         with open(path_to_output_file, "w") as f:
             f.write("a,p\n")
@@ -43,7 +43,7 @@ class ComClient:
             line = self.session.readline(self.buffer_size)
 
             print(line.decode("utf-8"))
-            print("it finished")
+            print("Finished")
 
 
 def parse_raw_data(path):
@@ -87,6 +87,5 @@ if __name__ == "__main__":
     axs[0].plot(hor_axis, result["a"])
     axs[1].plot(hor_axis, result["piezo"])
 
-    plt.show()
-
-    print("ok")
+    # plt.show()
+    plt.savefig(f"{RESULT_PATH}/{file_name}.png")

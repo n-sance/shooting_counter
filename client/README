@@ -1,0 +1,6 @@
+Shooting counter based on ***
+
+To find your device name use: `lsusb`
+Better to check with `ls /dev/ | grep ttyUSB0`
+
+To get data directly use: `cu -l /dev/ttyUSB0 -s 9600`

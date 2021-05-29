@@ -1,0 +1,5 @@
+.pio
+driver/.vscode/.browse.c_cpp.db*
+driver/.vscode/c_cpp_properties.json
+driver/.vscode/launch.json
+driver/.vscode/ipch

@@ -1,6 +1,23 @@
 #include "main.h"
 
 
+
+
+int get_summ_values_from_acc(float x, float y, float z)
+{
+  int x_l = (int)x;
+  int y_l = (int)y;
+  int z_l = (int)z;
+  if (x < 0)
+    x_l *= -1;
+  if (y < 0)
+    y_l *= -1;
+  if (z < 0)
+    z_l *= -1;
+
+  return (x_l + y_l + z_l);
+}
+
 void displayDataRate(Adafruit_ADXL345_Unified& accel)
 {
   Serial.print  ("Data Rate:    ");

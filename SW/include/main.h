@@ -21,6 +21,7 @@ void displayDataRate(Adafruit_ADXL345_Unified& accel);
 int get_summ_values_from_acc(float x, float y, float z);
 void monitor_mode();
 void get_data_from_sensors();
+void get_shoots();
 
 class ShootDetector {
 public:

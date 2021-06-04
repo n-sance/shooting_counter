@@ -15,10 +15,10 @@ void someAnother(void)
 MenuItem *init_menu(void (*function1)(), void (*function2)()) {
 	MenuItem *first = new MenuItem();
 	MenuItem *second = new MenuItem();
-	first->title = "Counter";
+	first->title = "Debug";
 	first->trigger_on_btn = function1;
 	first->next = second;
-	second->title = "Another";
+	second->title = "Normal";
 	second->trigger_on_btn = function2;
 	second->next = first;
 	return first;

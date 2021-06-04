@@ -6,22 +6,15 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_ADXL345_U.h>
 #include "OneButton.h"
+#include "configs.h"
 #include "SSD1306Wire.h" // legacy include: `#include "SSD1306.h"`
 #include "Ticker.h"
 #include <deque>
 
-
-#define SENSORS_POLL_FREQ_US 10
-#define SENSORS_POL_CNT 3000
-#define DEQUE_SIZE 10
-
-void displaySensorDetails(Adafruit_ADXL345_Unified& accel);
-void displayRange(Adafruit_ADXL345_Unified& accel);
-void displayDataRate(Adafruit_ADXL345_Unified& accel);
-int get_summ_values_from_acc(float x, float y, float z);
-void monitor_mode();
-void get_data_from_sensors();
-void get_shoots();
+typedef struct {
+	int acc;
+	int piezo;
+} sensors_data_sample_t;
 
 class ShootDetector {
 public:
@@ -43,16 +36,25 @@ public:
 	void PrintString(String text = "default text", bool preclear = false, bool render = true, const uint8_t* font = NULL, int16_t x = 0, int16_t y = 26, OLEDDISPLAY_TEXT_ALIGNMENT align = TEXT_ALIGN_LEFT);
 };
 
-
 class MenuItem {
 public:
 	char *title;
 	void (*trigger_on_btn)();
 	MenuItem *next;
-
-	// MenuItem();
-	// MenuItem(char *title, void (*trigger)(), MenuItem* next);
 };
 
+void displaySensorDetails(Adafruit_ADXL345_Unified& accel);
+void displayRange(Adafruit_ADXL345_Unified& accel);
+void displayDataRate(Adafruit_ADXL345_Unified& accel);
+int get_summ_values_from_acc(float x, float y, float z);
+void debug_mode();
+void count_mode();
+// void get_data_from_sensors();
+// void get_shoots();
+int calculate_shoots();
+void render_shoots();
+void render_sensdata();
+bool accelerometer_init();
+sensors_data_sample_t get_data_from_sensors();
 MenuItem *init_menu(void (*function1)(), void (*function2)());
 MenuItem *getNext(MenuItem *current);

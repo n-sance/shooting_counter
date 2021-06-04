@@ -1,5 +1,15 @@
 #include "main.h"
 
+std::deque<int> deque_acc(DEQUE_SIZE, 0);
+std::deque<int> deque_piez(DEQUE_SIZE, 0);
+ShootDetector shoot_detector(ACCEL_THRESHOLD, PIEZO_THRESHOLD, DEADZONE_SAMPLES);
+
+static void update_queues(const sensors_data_sample_t &measurement) {
+    deque_acc.push_back(measurement.acc);
+    deque_piez.push_back(measurement.piezo);
+    deque_acc.pop_front();
+    deque_piez.pop_front();
+}
 
 	ShootDetector::ShootDetector(int acc_thr, int piezo_thr, int timeout)
 	{
@@ -35,17 +45,14 @@
 	}
 
 
-// int **init_sample(int len)
-// {
-// 	int **sample = 0;
-// 	if (!(sample = (int **)malloc(len * sizeof(int *))))
-// 		Serial.println("Malloc in sample failed");
-// 	int i = 0;
-// 	while (i < len)
-// 	{
-// 		if (!(sample[i] = (int *)malloc(2 * sizeof(int))))
-// 			Serial.println("Malloc in sample failed");
-// 		sample[i][0] = 0;
-// 		sample[i][1] = 0;
-// 	}
-// }
+int calculate_shoots()
+{
+	sensors_data_sample_t measurement = get_data_from_sensors();
+	update_queues(measurement);
+
+    shoot_detector.potential_shoot_check(deque_acc, deque_piez);
+
+	//Log
+    Serial.print("Shoots: "); Serial.print(shoot_detector.shoots);
+	return shoot_detector.shoots;
+}

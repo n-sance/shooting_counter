@@ -1,8 +1,30 @@
 #include "main.h"
 
+Adafruit_ADXL345_Unified accel(ACC_ID);
 
+bool accelerometer_init() {
+  /* Initialise the sensor */
+  if(!accel.begin())
+  {
+    /* There was a problem detecting the ADXL345 ... check your connections */
+    Serial.println("ERROR: No ADXL345 detected");
+    return false;
+  }
 
+  /* Set the range to whatever is appropriate for your project */
+  accel.setRange(ADXL345_RANGE_16_G);
 
+  dataRate_t rate(ADXL345_DATARATE_3200_HZ);
+  accel.setDataRate(rate);
+
+  /* Display some basic information on this sensor */
+  displaySensorDetails(accel);
+
+  /* Display additional settings (outside the scope of sensor_t) */
+  displayDataRate(accel);
+  displayRange(accel);
+  return true;
+}
 int get_summ_values_from_acc(float x, float y, float z)
 {
   int x_l = (int)x;
@@ -118,4 +140,20 @@ void displaySensorDetails(Adafruit_ADXL345_Unified& accel)
   Serial.println("------------------------------------");
   Serial.println("");
   delay(500);
+}
+
+sensors_data_sample_t get_data_from_sensors()
+{
+    sensors_event_t event;
+    sensors_data_sample_t measurement;
+    //static int vibro_max = 0;
+    //static int acc_max = 0;  #maybe static needed
+    accel.getEvent(&event);
+    measurement.piezo = analogRead(PIEZO_ADC_GPIN);
+    measurement.acc = get_summ_values_from_acc(event.acceleration.x, event.acceleration.y, event.acceleration.z);
+
+    Serial.print(measurement.piezo); Serial.print(",");
+    Serial.println(measurement.acc);
+
+    return measurement;
 }

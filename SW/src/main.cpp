@@ -10,13 +10,10 @@ Display display(DISPLAY_I2C_ADDRESS, DISPLAY_I2C_SDA_GPIO, DISPLAY_I2C_SCK_GPIO)
 MenuItem* menu = init_menu(debug_mode, count_mode);
 
 void debug_mode()
-{
-    time1.start();
-}
+    { time1.start(); }
 
-void count_mode(){
-  time2.start();
-}
+void count_mode()
+  {time2.start(); }
 
 void render_shoots()
 {

@@ -69,7 +69,7 @@ void setup(void)
   }
   // display.flipScreenVertically();
   Serial.println("INFO: Configured. Ready to work");
-  display.PrintString("SC ver. 0.3. Wait..", true, true, ArialMT_Plain_10);
+  display.PrintString(String(VERSION), true, true, ArialMT_Plain_10);
   sleep(3);
   display.PrintString(menu->title, true, true, ArialMT_Plain_24);
 }
